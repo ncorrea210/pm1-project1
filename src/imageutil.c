@@ -108,7 +108,14 @@ imatrix* init_rgb(imatrix* this, int width, int height){
 
     // FILL IN THE CODE HERE
     
-    return NULL;
+    this->width = width;
+    this->height = height;
+
+    this->r = malloc(width*height);
+    this->g = malloc(width*height);
+    this->b = malloc(width*height);
+
+    return this;
 }
 
 // Set the pixel data of an imatrix from an RGB byte array
@@ -198,7 +205,24 @@ void free_imatrix(imatrix* image_matrix){
 imatrix* add(imatrix* m1, imatrix* m2){
     
     // FILL IN THE CODE HERE
-    return NULL;
+    
+    // guard statement to check if images have same size before beginning
+    if (m1 == NULL || m2 == NULL) return NULL;
+    if (m1->height != m2->height || m1->width != m2->width) return NULL;
+
+    imatrix* new_matrix = malloc(sizeof(imatrix));
+    init_rgb(new_matrix, m1->width, m1->height);
+    
+
+    for (int i = 0; i < new_matrix->height; i++) {
+        for (int j = 0; j < new_matrix->width; j++) {
+            new_matrix->r[i][j] = m1->r[i][j] + m2->r[i][j];
+            new_matrix->b[i][j] = m1->b[i][j] + m2->b[i][j];
+            new_matrix->g[i][j] = m1->g[i][j] + m2->g[i][j];
+        }
+    }
+
+    return new_matrix;
 }
 
 
@@ -215,7 +239,23 @@ imatrix* add(imatrix* m1, imatrix* m2){
 */
 imatrix* subtract(imatrix* m1, imatrix* m2) {
     // FILL IN THE CODE HERE
-    return NULL;
+    // guard statement to check if images have same size before beginning
+    if (m1 == NULL || m2 == NULL) return NULL;
+    if (m1->height != m2->height || m1->width != m2->width) return NULL;
+
+    imatrix* new_matrix = malloc(sizeof(imatrix));
+    init_rgb(new_matrix, m1->width, m1->height);
+    
+
+    for (int i = 0; i < new_matrix->height; i++) {
+        for (int j = 0; j < new_matrix->width; j++) {
+            new_matrix->r[i][j] = m1->r[i][j] - m2->r[i][j];
+            new_matrix->b[i][j] = m1->b[i][j] - m2->b[i][j];
+            new_matrix->g[i][j] = m1->g[i][j] - m2->g[i][j];
+        }
+    }
+
+    return new_matrix;
 }
 
 
@@ -232,6 +272,16 @@ imatrix* dot(imatrix* m1, imatrix* m2){
     
 
     // FILL IN THE CODE HERE
+    
+    if (m1 == NULL || m2 == NULL) return NULL;
+    if (m1->width != m2->height) return NULL;
+
+    int height = m1->height;
+    int width = m2->width;
+    imatrix* new_matrix = malloc(sizeof(imatrix));
+    init_rgb(new_matrix, width, height);
+
+    
  
     return NULL;
 }
@@ -251,8 +301,19 @@ imatrix* dot(imatrix* m1, imatrix* m2){
 imatrix* scale(imatrix* this, int width, int height, float alpha){
     
     // FILL IN THE CODE HERE
+    if (this == NULL) return NULL;
+    if (alpha < 0 || alpha > 1) return this;
 
-
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            this->r[i][j] = alpha*this->r[i][j];
+            this->g[i][j] = alpha*this->g[i][j];
+            this->b[i][j] = alpha*this->b[i][j];
+        }
+    }
+    
+    // Note that this function returning is not really necessary since it just
+    // edits the input matrix. No new memory is allocated, and thus there is no need to free
     return this;
 }
 
