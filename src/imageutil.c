@@ -175,7 +175,7 @@ void free_imatrix(imatrix* image_matrix){
         return;  
 
     // Free the memory allocated for this->r, this->g, and this->b
-    for (i = 0; i < image_matrix->height; ++i) {
+    for (i = 0; i < image_matrix->width; ++i) {
         if (image_matrix->r[i] != NULL){
             free(image_matrix->r[i]);
             image_matrix->r[i] = NULL;
@@ -195,6 +195,7 @@ void free_imatrix(imatrix* image_matrix){
         free(image_matrix->rgb_image);
         image_matrix->rgb_image = NULL;
     }
+
 }
 
 
@@ -213,13 +214,16 @@ void free_imatrix(imatrix* image_matrix){
 imatrix* add(imatrix* m1, imatrix* m2){
     
     // FILL IN THE CODE HERE
-    
+   
     // guard statement to check if images have same size before beginning
     if (m1 == NULL || m2 == NULL) return NULL;
     if (m1->height != m2->height || m1->width != m2->width) return NULL;
 
     imatrix* new_matrix = malloc(sizeof(imatrix));
+    new_matrix->width = m1->width;
+    new_matrix->height = m1->height;
     init_rgb(new_matrix, m1->width, m1->height);
+    init_funcptrs(new_matrix);
     
 
     for (int i = 0; i < new_matrix->height; i++) {
@@ -229,6 +233,8 @@ imatrix* add(imatrix* m1, imatrix* m2){
             new_matrix->g[i][j] = m1->g[i][j] + m2->g[i][j];
         }
     }
+
+    new_matrix->rgb_image = malloc(sizeof(uint8_t*) * new_matrix->width * new_matrix->height * CHANNEL_NUM);
 
     return new_matrix;
 }
@@ -252,8 +258,10 @@ imatrix* subtract(imatrix* m1, imatrix* m2) {
     if (m1->height != m2->height || m1->width != m2->width) return NULL;
 
     imatrix* new_matrix = malloc(sizeof(imatrix));
+    new_matrix->height = m1->height;
+    new_matrix->width = m1->width;
     init_rgb(new_matrix, m1->width, m1->height);
-    
+    init_funcptrs(new_matrix);
 
     for (int i = 0; i < new_matrix->height; i++) {
         for (int j = 0; j < new_matrix->width; j++) {
@@ -262,6 +270,8 @@ imatrix* subtract(imatrix* m1, imatrix* m2) {
             new_matrix->g[i][j] = m1->g[i][j] - m2->g[i][j];
         }
     }
+
+    new_matrix->rgb_image = malloc(sizeof(uint8_t*) * new_matrix->width * new_matrix->height * CHANNEL_NUM);
 
     return new_matrix;
 }

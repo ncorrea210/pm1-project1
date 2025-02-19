@@ -94,6 +94,7 @@ int main(int argc, char** argv){
     stbi_write_png(output_filename, output_image->width, output_image->height, CHANNEL_NUM, output_image->rgb_image, output_image->width * CHANNEL_NUM);
 
     free_imatrix(input_image_1);
+
     if (input_image_2 != NULL && (strcmp(function, "scale") != 0)){
         free_imatrix(input_image_2);
     }
