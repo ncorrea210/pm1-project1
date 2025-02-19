@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -std=c99 -w
+CFLAGS=-Wall -std=c99 -w -Wextra -Wpedantic -Werror
 LIBS=-lm #-ljpeg -lpng -ltiff
 INCLUDES=-I./stb_image
 SRC=./src/imageutil.c ./src/main.c# ./src/helpers.c 

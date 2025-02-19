@@ -51,7 +51,7 @@ enum RGB {RED, GREEN, BLUE};
 // function prototypes
 void init_funcptrs(imatrix* this);
 void write_rgb_to_image(imatrix* m);
-void write_image_to_rgb(imatrix* this);
+void write_image_to_rgb(imatrix* m);
 imatrix* init_rgb(imatrix* this, int width, int height);
 imatrix* add(imatrix* m1, imatrix* m2);
 imatrix* subtract(imatrix* m1, imatrix* m2);
