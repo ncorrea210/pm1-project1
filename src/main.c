@@ -33,7 +33,6 @@ int main(int argc, char** argv){
     char* input_file_2 = argc > 4 ? argv[3] : NULL;
     char* output_directory = argv[argc-1];
     
-    printf("Vars Set\n");
 
     int width, height, channels;
     //check if input file 1 exists
@@ -42,12 +41,10 @@ int main(int argc, char** argv){
         return 1;
     }    
 
-    printf("File 1 accesed\n");
 
     imatrix* input_image_1 = init_from_file(input_file_1, &width, &height, &channels);
     imatrix* input_image_2 = NULL;
 
-    printf("File 1 init\n");
 
     if (input_file_2 != NULL && (strcmp(function, "scale") != 0)){
         //check if input file 2 exis
@@ -76,7 +73,6 @@ int main(int argc, char** argv){
         output_image = input_image_1->dot(input_image_1, input_image_2);
     }
     else if (strcmp(function, "scale") == 0){
-        printf("Reached if scale func\n");
         float alpha = 1.0; // default value
         if (argc > 4){
             alpha = atof(input_file_2);

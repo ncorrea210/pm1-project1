@@ -27,21 +27,14 @@ imatrix* init_from_file(char* image_path, int* width, int* height, int* channels
     imatrix* image_matrix = malloc(sizeof(imatrix));
     init_funcptrs(image_matrix);
 
-    printf("Reached init rgb\n");
 
     // Set the internal RGB image reference and initialize the imatrix data structure
     image_matrix->rgb_image = rgb_image;
     image_matrix = init_rgb(image_matrix, *width, *height);
 
-    printf("rgb init\n");
-
     // Write the image data to the imatrix
     
-    printf("width = %d\n", image_matrix->width);
-
     image_matrix->write_image_to_rgb(image_matrix);
-
-    printf("image written\n");
 
     return image_matrix;
 }
@@ -143,12 +136,9 @@ imatrix* set_rgb_image(imatrix* this, uint8_t* new_rgb_image, int height, int wi
 // Write the pixel data of an imatrix to its internal RGB image buffer
 void write_rgb_to_image(imatrix* m){
 
-    printf("Function start\n");
     int i,j, height, width;
     height = m->height;
     width = m->width;
-
-    printf("set h, w\n");
 
     // Iterate through the image matrix and set the corresponding RGB pixel values in the RGB buffer
     for (i=0; i<height; ++i){
