@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -std=c99 -w -Wextra -Wpedantic -Werror 
+CFLAGS=-Wall -std=c99 -w -Wextra -Wpedantic -Werror
 LIBS=-lm #-ljpeg -lpng -ltiff
 INCLUDES=-I./stb_image
 SRC=./src/imageutil.c ./src/main.c# ./src/helpers.c 
@@ -21,4 +21,4 @@ $(TARGET): $(OBJS) ./src/main.o ./src/helpers.o
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) ./src/main.o $(TARGET)
+	rm -f $(OBJS) ./src/main.o $(TARGET) ./output.png
