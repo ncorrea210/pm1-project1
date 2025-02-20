@@ -298,10 +298,23 @@ imatrix* dot(imatrix* m1, imatrix* m2){
     int width = m2->width;
     imatrix* new_matrix = malloc(sizeof(imatrix));
     init_rgb(new_matrix, width, height);
+    init_funcptrs(new_matrix);
+    new_matrix->width = width;
+    new_matrix->height = height;
 
-    
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            for (int k = 0; k < m1->width; k++) {
+                new_matrix->r[i][j] = m1->r[i][k]*m2->r[k][i];
+                new_matrix->g[i][j] = m1->g[i][k]*m2->g[k][i];
+                new_matrix->b[i][j] = m1->b[i][k]*m2->b[k][i];
+            }
+        }
+    }
+
+    new_matrix->rgb_image = malloc(sizeof(uint8_t*) * width * height * CHANNEL_NUM);
  
-    return NULL;
+    return new_matrix;
 }
 
 
