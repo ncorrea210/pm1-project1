@@ -117,9 +117,9 @@ imatrix* init_rgb(imatrix* this, int width, int height){
     this->g = malloc(width * sizeof(uint8_t*));
     this->b = malloc(width * sizeof(uint8_t*));
     for (int i = 0; i < width; i++) {
-        this->r[i] = malloc(height * sizeof(uint8_t*));
-        this->g[i] = malloc(height * sizeof(uint8_t*));
-        this->b[i] = malloc(height * sizeof(uint8_t*));
+        this->r[i] = malloc(height * sizeof(uint8_t));
+        this->g[i] = malloc(height * sizeof(uint8_t));
+        this->b[i] = malloc(height * sizeof(uint8_t));
     }
 
     return this;
@@ -175,7 +175,7 @@ void free_imatrix(imatrix* image_matrix){
         return;  
 
     // Free the memory allocated for this->r, this->g, and this->b
-    for (i = 0; i < image_matrix->width; ++i) {
+    for (i = 0; i < image_matrix->width; i++) {
         if (image_matrix->r[i] != NULL){
             free(image_matrix->r[i]);
             image_matrix->r[i] = NULL;
@@ -195,6 +195,7 @@ void free_imatrix(imatrix* image_matrix){
         free(image_matrix->rgb_image);
         image_matrix->rgb_image = NULL;
     }
+
 
 }
 

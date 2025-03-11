@@ -98,6 +98,7 @@ int main(int argc, char** argv){
     if (input_image_2 != NULL && (strcmp(function, "scale") != 0)){
         free_imatrix(input_image_2);
     }
+    
     free_imatrix(output_image);
 
     return 0;
