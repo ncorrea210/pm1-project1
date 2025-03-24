@@ -125,23 +125,16 @@ imatrix* init_rgb(imatrix* this, int width, int height){
     
     this->width = width;
     this->height = height;
-#if 1
+#if 0 // 1:sizeof(uint8_t) 0:sizeof(uint8_t*)
+#if 0 // 1:width iterate 0:height iterate
     this->r = malloc(width * sizeof(uint8_t*));
     this->g = malloc(width * sizeof(uint8_t*));
     this->b = malloc(width * sizeof(uint8_t*));
-    if (this->r == NULL || this->g == NULL || this->b == NULL) {
-        perror("Failed to load one of r, g, or b in init_rgb in imageutil.c");
-        exit(EXIT_FAILURE);
-    }
-    for (int i = 0; i < width; i++) {
-        this->r[i] = malloc(height * sizeof(uint8_t*));
-        this->g[i] = malloc(height * sizeof(uint8_t*));
-        this->b[i] = malloc(height * sizeof(uint8_t*));
-        if (this->r[i] == NULL || this->g[i] == NULL || this->b[i] == NULL) {
-            perror("Failed to load one of r, g, or b in init_rgb in imageutil.c");
-            exit(EXIT_FAILURE);
-        }
-    }
+   for (int i = 0; i < width; i++) {
+        this->r[i] = malloc(height * sizeof(uint8_t));
+        this->g[i] = malloc(height * sizeof(uint8_t));
+        this->b[i] = malloc(height * sizeof(uint8_t));
+   }
 #else
     this->r = malloc(height * sizeof(uint8_t*));
     this->g = malloc(height * sizeof(uint8_t*));
@@ -151,6 +144,27 @@ imatrix* init_rgb(imatrix* this, int width, int height){
         this->g[i] = malloc(width * sizeof(uint8_t));
         this->b[i] = malloc(width * sizeof(uint8_t));
     }
+#endif
+#else
+#if 0 // 1:width iterate 0:height iterate
+    this->r = malloc(width * sizeof(uint8_t*));
+    this->g = malloc(width * sizeof(uint8_t*));
+    this->b = malloc(width * sizeof(uint8_t*));
+    for (int i = 0; i < width; i++) {
+        this->r[i] = malloc(height * sizeof(uint8_t*));
+        this->g[i] = malloc(height * sizeof(uint8_t*));
+        this->b[i] = malloc(height * sizeof(uint8_t*));
+    }
+#else
+    this->r = malloc(height * sizeof(uint8_t*));
+    this->g = malloc(height * sizeof(uint8_t*));
+    this->b = malloc(height * sizeof(uint8_t*));
+    for (int i = 0; i < height; i++) {
+        this->r[i] = malloc(width * sizeof(uint8_t*));
+        this->g[i] = malloc(width * sizeof(uint8_t*));
+        this->b[i] = malloc(width * sizeof(uint8_t*));
+    }
+#endif
 #endif
 
     return this;
