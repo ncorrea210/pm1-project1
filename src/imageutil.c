@@ -112,7 +112,7 @@ imatrix* init_rgb(imatrix* this, int width, int height){
     
     this->width = width;
     this->height = height;
-
+#if 0
     this->r = malloc(width * sizeof(uint8_t*));
     this->g = malloc(width * sizeof(uint8_t*));
     this->b = malloc(width * sizeof(uint8_t*));
@@ -121,6 +121,16 @@ imatrix* init_rgb(imatrix* this, int width, int height){
         this->g[i] = malloc(height * sizeof(uint8_t));
         this->b[i] = malloc(height * sizeof(uint8_t));
     }
+#else
+    this->r = malloc(height * sizeof(uint8_t*));
+    this->g = malloc(height * sizeof(uint8_t*));
+    this->b = malloc(height * sizeof(uint8_t*));
+    for (int i = 0; i < height; i++) {
+        this->r[i] = malloc(width * sizeof(uint8_t));
+        this->g[i] = malloc(width * sizeof(uint8_t));
+        this->b[i] = malloc(width * sizeof(uint8_t));
+    }
+#endif
 
     return this;
 }

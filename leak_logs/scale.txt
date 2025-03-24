@@ -1,1 +1,0 @@
-valgrind --leak-check=full ./imageutil scale examples/red.png 0.5 .
