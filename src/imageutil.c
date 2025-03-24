@@ -10,6 +10,7 @@
 // // define STB_IMAGE_RESIZE_IMPLEMENTATION to enable implementation of stb_image_resize functions
 // // #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image_resize.h"
+#include <cstdlib>
 
 #include "imageutil.h"
 
@@ -25,6 +26,10 @@ imatrix* init_from_file(char* image_path, int* width, int* height, int* channels
 
     // Allocate memory for the imatrix and initialize function pointers
     imatrix* image_matrix = malloc(sizeof(imatrix));
+    if (image_matrix == NULL) {
+        perror("Failed to load image matrix in init_from_file in imageutil.c");
+        exit(EXIT_FAILURE);
+    }
     init_funcptrs(image_matrix);
 
 
@@ -48,6 +53,10 @@ imatrix* init_from_rgb_image(uint8_t* rgb_image, int width, int height){
 
     // Allocate memory for the imatrix and initialize function pointers
     imatrix* image_matrix = malloc(sizeof(imatrix));
+    if (image_matrix == NULL) {
+        perror("Failed to load image matrix in init_from_rgb_image in imageutil.c");
+        exit(EXIT_FAILURE);
+    }
     init_funcptrs(image_matrix);
 
     // Set the internal RGB image reference and initialize the imatrix data structure
@@ -65,6 +74,10 @@ imatrix* init_blank_rgb_image(int width, int height){
 
     // Allocate memory for the imatrix and initialize function pointers
     imatrix* image_matrix = malloc(sizeof(imatrix));
+    if (image_matrix == NULL) {
+        perror("Failed to load image_matrix in init_from_rgb_image in imageutil.c");
+        exit(EXIT_FAILURE);
+    }
     init_funcptrs(image_matrix);
 
     // Allocate memory for the internal RGB image reference and initialize the imatrix data structure
@@ -112,14 +125,22 @@ imatrix* init_rgb(imatrix* this, int width, int height){
     
     this->width = width;
     this->height = height;
-#if 0
+#if 1
     this->r = malloc(width * sizeof(uint8_t*));
     this->g = malloc(width * sizeof(uint8_t*));
     this->b = malloc(width * sizeof(uint8_t*));
+    if (this->r == NULL || this->g == NULL || this->b == NULL) {
+        perror("Failed to load one of r, g, or b in init_rgb in imageutil.c");
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < width; i++) {
-        this->r[i] = malloc(height * sizeof(uint8_t));
-        this->g[i] = malloc(height * sizeof(uint8_t));
-        this->b[i] = malloc(height * sizeof(uint8_t));
+        this->r[i] = malloc(height * sizeof(uint8_t*));
+        this->g[i] = malloc(height * sizeof(uint8_t*));
+        this->b[i] = malloc(height * sizeof(uint8_t*));
+        if (this->r[i] == NULL || this->g[i] == NULL || this->b[i] == NULL) {
+            perror("Failed to load one of r, g, or b in init_rgb in imageutil.c");
+            exit(EXIT_FAILURE);
+        }
     }
 #else
     this->r = malloc(height * sizeof(uint8_t*));
@@ -231,6 +252,10 @@ imatrix* add(imatrix* m1, imatrix* m2){
     if (m1->height != m2->height || m1->width != m2->width) return NULL;
 
     imatrix* new_matrix = malloc(sizeof(imatrix));
+    if (new_matrix == NULL) {
+        perror("Failed to loade new_matrix in add in image_util.c");
+        exit(EXIT_FAILURE);
+    }
     new_matrix->width = m1->width;
     new_matrix->height = m1->height;
     init_rgb(new_matrix, m1->width, m1->height);
@@ -246,6 +271,10 @@ imatrix* add(imatrix* m1, imatrix* m2){
     }
 
     new_matrix->rgb_image = malloc(sizeof(uint8_t*) * new_matrix->width * new_matrix->height * CHANNEL_NUM);
+    if (new_matrix->rgb_image == NULL) {
+        perror("Failed to load rgb_image in add in image_util.c");
+        exit(EXIT_FAILURE);
+    }
 
     return new_matrix;
 }
@@ -269,6 +298,10 @@ imatrix* subtract(imatrix* m1, imatrix* m2) {
     if (m1->height != m2->height || m1->width != m2->width) return NULL;
 
     imatrix* new_matrix = malloc(sizeof(imatrix));
+    if (new_matrix == NULL) {
+        perror("Failed to load new_matrix in subtract in image_util.c");
+        exit(EXIT_FAILURE);
+    }
     new_matrix->height = m1->height;
     new_matrix->width = m1->width;
     init_rgb(new_matrix, m1->width, m1->height);
@@ -283,6 +316,10 @@ imatrix* subtract(imatrix* m1, imatrix* m2) {
     }
 
     new_matrix->rgb_image = malloc(sizeof(uint8_t*) * new_matrix->width * new_matrix->height * CHANNEL_NUM);
+    if (new_matrix->rgb_image == NULL) {
+        perror("Failed to load rgb_image in subtract in image_util.c");
+        exit(EXIT_FAILURE);
+    }
 
     return new_matrix;
 }
@@ -308,6 +345,10 @@ imatrix* dot(imatrix* m1, imatrix* m2){
     int height = m1->height;
     int width = m2->width;
     imatrix* new_matrix = malloc(sizeof(imatrix));
+    if (new_matrix == NULL) {
+        perror("Failed to load new_matrix in dot in image_util.c");
+        exit(EXIT_FAILURE);
+    }
     init_rgb(new_matrix, width, height);
     init_funcptrs(new_matrix);
     new_matrix->width = width;
@@ -324,7 +365,11 @@ imatrix* dot(imatrix* m1, imatrix* m2){
     }
 
     new_matrix->rgb_image = malloc(sizeof(uint8_t*) * width * height * CHANNEL_NUM);
- 
+    if (new_matrix->rgb_image == NULL) {
+        perror("Failed to load rgb_image in dot in image_util.c");
+        exit(EXIT_FAILURE);
+    }
+
     return new_matrix;
 }
 
