@@ -10,7 +10,7 @@
 // // define STB_IMAGE_RESIZE_IMPLEMENTATION to enable implementation of stb_image_resize functions
 // // #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image_resize.h"
-#include <cstdlib>
+#include <stdlib.h>
 
 #include "imageutil.h"
 
