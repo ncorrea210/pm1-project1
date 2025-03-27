@@ -125,48 +125,32 @@ imatrix* init_rgb(imatrix* this, int width, int height){
     
     this->width = width;
     this->height = height;
-#if 0 // 1:sizeof(uint8_t) 0:sizeof(uint8_t*)
-#if 0 // 1:width iterate 0:height iterate
-    this->r = malloc(width * sizeof(uint8_t*));
-    this->g = malloc(width * sizeof(uint8_t*));
-    this->b = malloc(width * sizeof(uint8_t*));
-   for (int i = 0; i < width; i++) {
-        this->r[i] = malloc(height * sizeof(uint8_t));
-        this->g[i] = malloc(height * sizeof(uint8_t));
-        this->b[i] = malloc(height * sizeof(uint8_t));
-   }
-#else
     this->r = malloc(height * sizeof(uint8_t*));
     this->g = malloc(height * sizeof(uint8_t*));
     this->b = malloc(height * sizeof(uint8_t*));
+    
+    if (!this->r || !this->g || !this->b) { 
+        perror("Failed to initialize rgb");
+        free(this->r);
+        free(this->g);
+        free(this->b);
+        exit(EXIT_FAILURE);
+    }
+
     for (int i = 0; i < height; i++) {
         this->r[i] = malloc(width * sizeof(uint8_t));
         this->g[i] = malloc(width * sizeof(uint8_t));
         this->b[i] = malloc(width * sizeof(uint8_t));
+        if (!this->r[i] || !this->g[i] || !this->b[i]) {
+            perror("Failed to initialize rgb");
+            for (int j = 0; j < i; j++) {
+                free(this->r[j]);
+                free(this->g[j]);
+                free(this->b[j]);
+            }
+            exit(EXIT_FAILURE);
+        }
     }
-#endif
-#else
-#if 0 // 1:width iterate 0:height iterate
-    this->r = malloc(width * sizeof(uint8_t*));
-    this->g = malloc(width * sizeof(uint8_t*));
-    this->b = malloc(width * sizeof(uint8_t*));
-    for (int i = 0; i < width; i++) {
-        this->r[i] = malloc(height * sizeof(uint8_t*));
-        this->g[i] = malloc(height * sizeof(uint8_t*));
-        this->b[i] = malloc(height * sizeof(uint8_t*));
-    }
-#else
-    this->r = malloc(height * sizeof(uint8_t*));
-    this->g = malloc(height * sizeof(uint8_t*));
-    this->b = malloc(height * sizeof(uint8_t*));
-    for (int i = 0; i < height; i++) {
-        this->r[i] = malloc(width * sizeof(uint8_t*));
-        this->g[i] = malloc(width * sizeof(uint8_t*));
-        this->b[i] = malloc(width * sizeof(uint8_t*));
-    }
-#endif
-#endif
-
     return this;
 }
 
@@ -220,7 +204,7 @@ void free_imatrix(imatrix* image_matrix){
         return;  
 
     // Free the memory allocated for this->r, this->g, and this->b
-    for (i = 0; i < image_matrix->width; i++) {
+    for (i = 0; i < image_matrix->height; i++) {
         if (image_matrix->r[i] != NULL){
             free(image_matrix->r[i]);
             image_matrix->r[i] = NULL;
@@ -367,14 +351,20 @@ imatrix* dot(imatrix* m1, imatrix* m2){
     init_funcptrs(new_matrix);
     new_matrix->width = width;
     new_matrix->height = height;
-
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
+            unsigned int tempr = 0;
+            unsigned int tempg = 0;
+            unsigned int tempb = 0;
             for (int k = 0; k < m1->width; k++) {
-                new_matrix->r[i][j] = m1->r[i][k]*m2->r[k][i];
-                new_matrix->g[i][j] = m1->g[i][k]*m2->g[k][i];
-                new_matrix->b[i][j] = m1->b[i][k]*m2->b[k][i];
+                tempr = m1->r[i][k]*m2->r[k][i];
+                tempg = m1->g[i][k]*m2->g[k][i];
+                tempb = m1->b[i][k]*m2->b[k][i];
             }
+
+            new_matrix->r[i][j] = tempr > 255 ? 255 : tempr;
+            new_matrix->g[i][j] = tempg > 255 ? 255 : tempg;
+            new_matrix->b[i][j] = tempb > 255 ? 255 : tempb;
         }
     }
 
